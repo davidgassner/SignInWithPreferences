@@ -10,8 +10,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-import static com.example.android.data.Constants.MY_GLOBAL_PREFS;
-import static com.example.android.data.Constants.USER_NAME_KEY;
+import com.example.android.data.util.Constants;
+
+import static com.example.android.data.util.Constants.MY_GLOBAL_PREFS;
+import static com.example.android.data.util.Constants.USER_NAME;
 
 public class SigninActivity extends AppCompatActivity {
 
@@ -29,7 +31,7 @@ public class SigninActivity extends AppCompatActivity {
         mPasswordView = (EditText) findViewById(R.id.password);
 
         SharedPreferences prefs = getSharedPreferences(MY_GLOBAL_PREFS, MODE_PRIVATE);
-        String userName = prefs.getString(USER_NAME_KEY, "");
+        String userName = prefs.getString(USER_NAME, "");
 
         if (!TextUtils.isEmpty(userName)) {
             mUserNameView.setText(userName);
@@ -76,8 +78,8 @@ public class SigninActivity extends AppCompatActivity {
             focusView.requestFocus();
         } else {
             Intent intent = new Intent();
-            intent.putExtra(Constants.USER_NAME_KEY, userName);
-            intent.putExtra(Constants.PASSWORD_KEY, password);
+            intent.putExtra(Constants.USER_NAME, userName);
+            intent.putExtra(Constants.PASSWORD, password);
             setResult(RESULT_OK, intent);
             finish();
         }

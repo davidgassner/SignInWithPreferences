@@ -12,14 +12,17 @@ import android.widget.Toast;
 
 import com.example.android.data.model.DataItem;
 import com.example.android.data.model.SampleDataProvider;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
 
+import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.example.android.data.Constants.MY_GLOBAL_PREFS;
-import static com.example.android.data.Constants.PASSWORD_KEY;
-import static com.example.android.data.Constants.USER_NAME_KEY;
+import static com.example.android.data.util.Constants.MY_GLOBAL_PREFS;
+import static com.example.android.data.util.Constants.PASSWORD;
+import static com.example.android.data.util.Constants.USER_NAME;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -69,15 +72,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_LOGIN && resultCode == RESULT_OK) {
-            String userName = data.getStringExtra(USER_NAME_KEY);
-            String password = data.getStringExtra(PASSWORD_KEY);
-            Toast.makeText(this, "Logged in as " + userName, Toast.LENGTH_SHORT).show();
+            String userName = data.getStringExtra(USER_NAME);
+            String password = data.getStringExtra(PASSWORD);
+
+            final HashCode hashCode = Hashing.sha1().hashString(password, Charset.defaultCharset());
 
             SharedPreferences.Editor editor = getSharedPreferences(MY_GLOBAL_PREFS, MODE_PRIVATE).edit();
-            editor.putString(USER_NAME_KEY, userName);
-            editor.putString(PASSWORD_KEY, password);
+            editor.putString(USER_NAME, userName);
+            editor.putString(PASSWORD, hashCode.toString());
             editor.apply();
 
+            Toast.makeText(this, "Logged in as " + userName, Toast.LENGTH_SHORT).show();
         }
     }
 }
