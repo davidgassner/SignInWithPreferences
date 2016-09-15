@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Nadia\'s</string>
+    <string name="title_activity_signin">Sign in</string>
+
+    <!-- Strings related to signin -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="sign_in">Sign in</string>
+</resources>
