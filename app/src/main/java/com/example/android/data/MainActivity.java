@@ -2,11 +2,14 @@ package com.example.android.data;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -29,7 +32,11 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int ACTION_LOGIN = 1001;
     private static final int REQUEST_LOGIN = 1002;
-    List<DataItem> dataItemList = SampleDataProvider.dataItemList;
+    private static final int ACTION_SETTINGS = 1003;
+    private static final int REQUEST_PREFS_ACTIVITY = 1004;
+    private List<DataItem> dataItemList = SampleDataProvider.dataItemList;
+    private SharedPreferences settings;
+    private OnSharedPreferenceChangeListener prefsListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,16 +50,40 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        prefsListener = new OnSharedPreferenceChangeListener() {
+            public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+                Log.i("Prefs", "onSharedPreferenceChanged");
+                displayData();
+            }
+        };
+
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
+        settings.registerOnSharedPreferenceChangeListener(prefsListener);
+
+        displayData();
+
+    }
+
+    private void displayData() {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rvItems);
         DataItemAdapter adapter = new DataItemAdapter(this, dataItemList);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        boolean displayGrid = settings.getBoolean(getString(R.string.pref_display_grid), false);
+        Log.i("Prefs", "displayData: " + displayGrid);
+
+        if (displayGrid) {
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
+            recyclerView.setLayoutManager(gridLayoutManager);
+        } else {
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, ACTION_LOGIN, 0, R.string.sign_in);
+        menu.add(0, ACTION_SETTINGS, 0, R.string.settings);
         return true;
     }
 
@@ -63,6 +94,10 @@ public class MainActivity extends AppCompatActivity {
             case ACTION_LOGIN:
                 Intent intent = new Intent(this, SigninActivity.class);
                 startActivityForResult(intent, REQUEST_LOGIN);
+                return true;
+            case ACTION_SETTINGS:
+                Intent prefs_intent = new Intent(this, PrefsActivity.class);
+                startActivity(prefs_intent);
                 return true;
         }
 

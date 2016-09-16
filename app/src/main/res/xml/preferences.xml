@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="Display settings">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/pref_display_grid"
+            android:summary="@string/pref_display_grid_summary"
+            android:title="@string/pref_display_grid_title" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

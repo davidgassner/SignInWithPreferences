@@ -8,4 +8,8 @@
     <string name="action_sign_in">Sign in</string>
     <string name="error_field_required">This field is required</string>
     <string name="sign_in">Sign in</string>
+    <string name="settings">Settings</string>
+    <string name="pref_display_grid_title">Display grid</string>
+    <string name="pref_display_grid_summary">Display data in a grid of three columns</string>
+    <string name="pref_display_grid">pref_display_grid</string>
 </resources>
