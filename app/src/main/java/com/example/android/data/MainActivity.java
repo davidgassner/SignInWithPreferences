@@ -3,6 +3,7 @@ package com.example.android.data;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
             final HashCode hashCode = Hashing.sha1().hashString(password, Charset.defaultCharset());
 
             SharedPreferences.Editor editor = getSharedPreferences(MY_GLOBAL_PREFS, MODE_PRIVATE).edit();
+//            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
             editor.putString(USER_NAME, userName);
             editor.putString(PASSWORD, hashCode.toString());
             editor.apply();
